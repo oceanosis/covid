@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Environment vars
+
+PYTHON_VERSION="3.7.7"
+POSTGRES_VERSION="12.2"
+APP_VERSION="1.0"
+
+PY_BUILD=covidapp/python:$PYTHON_VERSION-$APP_VERSION
+PSQL_BUILD=covidapp/postgres:$POSTGRES_VERSION-$APP_VERSION
+
+DB_CONTAINER_NAME="devdb"
+PY_CONTAINER_NAME="pyapp"
