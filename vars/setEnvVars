@@ -11,3 +11,5 @@ PSQL_BUILD=covidapp/postgres:$POSTGRES_VERSION-$APP_VERSION
 
 DB_CONTAINER_NAME="devdb"
 PY_CONTAINER_NAME="pyapp"
+
+RAWDATA_REPO_URL="https://github.com/CSSEGISandData/COVID-19.git"

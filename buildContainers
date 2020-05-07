@@ -4,7 +4,7 @@ set -e
 
 BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "$BASE/setEnvVars"
+source "$BASE/vars/setEnvVars"
 
 docker build -t $PY_BUILD\
     --build-arg app_version=$APP_VERSION \

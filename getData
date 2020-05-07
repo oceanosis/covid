@@ -3,12 +3,12 @@ set -e
 
 BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "$BASE/setEnvVars"
+source "$BASE/vars/setEnvVars"
 
 PYAPPS=$BASE/python
 PYDATA=$BASE/coviddata
 
-[ -d $PYDATA ] || mkdir -p "$PYDATA"
+docker stop $PY_CONTAINER_NAME  || true && docker rm $PY_CONTAINER_NAME || true
 
 if [ "$(ls -A $PYDATA)" ]; then
     rm -rf $PYDATA && mkdir -p "$PYDATA"
@@ -19,6 +19,6 @@ fi
 docker run -d --name $PY_CONTAINER_NAME \
 	   -v "$PYAPPS":"/apps" \
 	   -v "$PYDATA":"/data" \
-	   $PY_BUILD python3 /apps/app.py || false
+	   $PY_BUILD python3 /apps/app.py  -f "/data" -u $RAWDATA_REPO_URL || false
 
 exit 0;

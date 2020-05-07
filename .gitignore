@@ -2,3 +2,4 @@ dbdata/*
 logs/*
 .idea
 coviddata/*
+__pycache__

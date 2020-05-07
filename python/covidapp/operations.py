@@ -1,29 +1,25 @@
 from git import Repo
 
-class cloningRepo:
-    def __init__(self):
-        print('Cloning repo...' )
+class downloadData:
 
-    def gitClone(self,DATADIR,REMOTE_URL):
-
+    @staticmethod
+    def gitClone(REMOTE_URL,DATADIR):
         try:
             Repo.clone_from(REMOTE_URL,DATADIR)
         except Exception as e:
             print(str(e))
         finally:
-            print('Cloning done from %s' % self.REMOTE_URL)
+            print('Cloning done from %s' % REMOTE_URL)
 
-class parser:
-    def __init__(self):
+
+class dataParser:
+    def __init__(self,DATADIR):
         self.DATADIR = DATADIR
 
     def parseFile(self):
         print('source data: %s' % self.DATADIR)
 
 class database:
-    def __init__(self):
-        self.DATADIR = DATADIR
-
     def connect(self):
         print('')
 

@@ -6,7 +6,7 @@ ARG app_version
 
 RUN echo "Building $app_version"
 
-COPY pg_hba.conf /var/lib/postgresql/data/pg_hba.conf
+#COPY pg_hba.conf /var/lib/postgresql/data/pg_hba.conf
 
 
 
