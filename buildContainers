@@ -17,4 +17,7 @@ docker build -t $PSQL_BUILD \
      --build-arg POSTGRES_VERSION=$POSTGRES_VERSION \
      $BASE/builds/postgres
 
-
+docker build -t $CRDB_BUILD \
+    --build-arg app_version=$APP_VERSION \
+     --build-arg CRDB_VERSION=$CRDB_VERSION \
+     $BASE/builds/cockroach

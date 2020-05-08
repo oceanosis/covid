@@ -31,6 +31,7 @@ docker run -d --name $DB_CONTAINER_NAME \
 	   -e POSTGRES_USER=$POSTGRES_USER \
 	   -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
 	   -e POSTGRES_INITDB_WALDIR=$POSTGRES_INITDB_WALDIR \
+	   -p 5432:5432 \
 	   -v "$POSTGRESQL_CONF":"/etc/postgresql/postgresql.conf" \
 	   -v "$INIT_DB_SQL":"/docker-entrypoint-initdb.d/initdb.sql"  \
 	   $PSQL_BUILD postgres -c 'config_file=/etc/postgresql/postgresql.conf' || false
