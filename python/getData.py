@@ -1,5 +1,4 @@
 from covidapp.operations import *
-from covidapp.dataops import *
 import argparse
 import logging
 
@@ -36,27 +35,11 @@ def getRawData(RAWDATA,REPO_URL):
     except Exception as e:
         print(str(e))
 
-def processRawData():
-    try:
-        print("PARSING DATA...")
-        logger.info("Processing raw data" )
-        # Next Steps
-        #dp=dataParser()
-        #dp.parseFile(RAWDATA)
-        #database.connect('')
-        #database.insertDataToDb('')
-        #database.disconnect('')
-        #analyzeData.analyze('')
-
-    except Exception as e:
-        print(str(e))
-
 
 if __name__ == '__main__':
     logger.info("Getting raw data from %s" % args.url)
     print(args.url)
     getRawData(args.folder,args.url)
-    processRawData()
 
 
 

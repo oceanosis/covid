@@ -3,3 +3,4 @@ logs/*
 .idea
 coviddata/*
 __pycache__
+crdbdata/*
