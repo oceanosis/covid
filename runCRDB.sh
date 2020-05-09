@@ -8,6 +8,7 @@ source "$BASE/vars/setEnvVars"
 #CRDB_INITDB_ARGS=
 CRDBDATA="$BASE/crdbdata"
 INIT_SQL="$BASE/conf/crdb.sql"
+CRT_DIR="$BASE/certs"
 
 runsql() { ./cockroach sql --insecure -e "$1"; }
 
@@ -16,7 +17,7 @@ docker network create -d bridge roachnet || true
 
 for node in roach1 roach2 roach3;
 do
-    docker exec -it $node ./cockroach quit --insecure || true
+    docker exec -it $node ./cockroach quit --certs-dir=/cockroach/certs|| true
     docker stop $node || true
     docker rm $node || true
 done
@@ -32,27 +33,35 @@ docker run -d --name=roach1  --hostname=roach1 \
     --net=roachnet \
     -p 26257:26257 -p 8080:8080  \
     -v "$CRDBDATA/roach1":"/cockroach/cockroach-data" \
-	-v "$INIT_SQL":"/cockroach/cockroach-init.sql" \
+	-v "$INIT_SQL":"/cockroach/init/cockroach-init.sql":ro \
+	-v "$CRT_DIR/roach1":"/cockroach/certs":ro \
     $CRDB_BUILD start \
-    --insecure \
-    --join=roach1,roach2,roach3 || false
+    --certs-dir=/cockroach/certs \
+    --join=roach1,roach2,roach3  || false
 
 for node in roach2 roach3;
 do
 docker run -d --name=$node --hostname=$node \
     --net=roachnet \
     -v "$CRDBDATA/$node":"/cockroach/cockroach-data" \
+    -v "$CRT_DIR/$node":"/cockroach/certs":ro \
     $CRDB_BUILD start \
-    --insecure \
-    --join=roach1,roach2,roach3 || false
+    --certs-dir=/cockroach/certs \
+    --join=roach1,roach2,roach3  || false
 done
 
-docker exec -it roach1 ./cockroach init --insecure || false
-
-
-
-docker exec -it roach1 ./cockroach sql --insecure < /cockroach/cockroach-init.sql || false
+docker exec -it roach1 ./cockroach init --certs-dir=/cockroach/certs  || false
+docker exec -it roach1 ./cockroach sql < /cockroach/init/cockroach-init.sql || false
 
 # To test connection;
-#  docker exec -it roach1 ./cockroach sql --insecure
+#  docker exec -it roach1 ./cockroach sql --certs-dir=/cockroach/certs
+#
+# Certs creation. ca and root certs will be common for 3. Each one will be have its own node crt. so create 3 folders under certs.
+# start roach1 with --insecure and create all
+# docker exec -it roach1 ./cockroach cert create-ca --certs-dir=/cockroach/certs --ca-key=/cockroach/certs/ca.key
+# docker exec -it roach1 ./cockroach cert create-node roach1 localhost --certs-dir=/cockroach/certs --ca-key=/cockroach/certs/ca.key
+# docker exec -it roach1 ./cockroach cert create-node roach2 localhost --certs-dir=/cockroach/certs --ca-key=/cockroach/certs/ca.key
+# docker exec -it roach1 ./cockroach cert create-node roach3 localhost --certs-dir=/cockroach/certs --ca-key=/cockroach/certs/ca.key
+# docker exec -it roach1 ./cockroach cert create-client root --certs-dir=/cockroach/certs --ca-key=/cockroach/certs/ca.key
+#
 exit 0;
