@@ -43,12 +43,26 @@ def processRawData():
     except Exception as e:
         print(str(e))
 
+def print_test(conn):
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM TEST")
+        rows = cur.fetchall()
+        conn.commit()
+
+        for row in rows:
+            print([str(cell) for cell in row])
+
 
 if __name__ == '__main__':
-    logger.info("Getting raw data from %s" % args.url)
-    print(args.url)
-    getRawData(args.folder,args.url)
-    processRawData()
+    logger.info("Connecting CRDB:")
+    print("Connecting CRDB...")
+    conn = database.crdb_connect('coviddb', 'coviduser', 'covidpass')
+    print("Connected!")
+    print_test(conn)
+
+    database.disconnect(conn)
+
+    #processRawData()
 
 
 

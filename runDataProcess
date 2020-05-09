@@ -10,15 +10,20 @@ PYDATA=$BASE/coviddata
 
 docker stop $PY_CONTAINER_NAME  || true && docker rm $PY_CONTAINER_NAME || true
 
-if [ "$(ls -A $PYDATA)" ]; then
-    rm -rf $PYDATA && mkdir -p "$PYDATA"
-elif [ ! -d $PYDATA ]; then
-    mkdir -p "$PYDATA"
-fi
+#if [ "$(ls -A $PYDATA)" ]; then
+#    rm -rf $PYDATA && mkdir -p "$PYDATA"
+#elif [ ! -d $PYDATA ]; then
+#    mkdir -p "$PYDATA"
+#fi
+
+#docker run -d --name $PY_CONTAINER_NAME \
+#	   -v "$PYAPPS":"/apps" \
+#	   -v "$PYDATA":"/data" \
+#	   $PY_BUILD python3 /apps/getData.py  -f "/data" -u $RAWDATA_REPO_URL || false
 
 docker run -d --name $PY_CONTAINER_NAME \
 	   -v "$PYAPPS":"/apps" \
 	   -v "$PYDATA":"/data" \
-	   $PY_BUILD python3 /apps/getData.py  -f "/data" -u $RAWDATA_REPO_URL || false
+	   $PY_BUILD python3 /apps/processData.py  -f "/data" -d $RAWDATA_REPO_URL || false
 
 exit 0;

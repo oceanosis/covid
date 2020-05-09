@@ -1,4 +1,8 @@
 from git import Repo
+import psycopg2
+import time
+import logging
+import random
 
 class downloadData:
 
@@ -12,21 +16,31 @@ class downloadData:
             print('Cloning done from %s' % REMOTE_URL)
 
 
-class dataParser:
-    def __init__(self,DATADIR):
-        self.DATADIR = DATADIR
-
-    def parseFile(self):
-        print('source data: %s' % self.DATADIR)
-
 class database:
-    def connect(self):
-        print('')
 
-    def disconnect(self):
-        print('')
+    @staticmethod
+    def crdb_connect( DBNAME, USER, PASSWORD):
+        try:
+            conn = psycopg2.connect(
+                database='DBNAME',
+                user='USER',
+                password='PASSWORD',
+                sslmode='require',
+                sslrootcert='certs/ca.crt',
+                sslkey='certs/client.root.key',
+                sslcert='certs/client.root.crt',
+                port=26257,
+                host='172.18.0.2'
+            )
+            return conn
+        except Exception as e:
+            print(str(e))
 
-    def insertDataToDb(self):
+    @staticmethod
+    def disconnect(conn):
+        conn.close()
+
+    def insertCSV(self):
         print('')
 
 
