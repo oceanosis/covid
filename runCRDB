@@ -33,7 +33,6 @@ docker run -d --name=roach1  --hostname=roach1 \
     --net=roachnet \
     -p 26257:26257 -p 8080:8080  \
     -v "$CRDBDATA/roach1":"/cockroach/cockroach-data" \
-	-v "$INIT_SQL":"/cockroach/init/cockroach-init.sql":ro \
 	-v "$CRT_DIR/roach1":"/cockroach/certs":ro \
     $CRDB_BUILD start \
     --certs-dir=/cockroach/certs \
@@ -51,7 +50,7 @@ docker run -d --name=$node --hostname=$node \
 done
 
 docker exec -it roach1 ./cockroach init --certs-dir=/cockroach/certs  || false
-docker exec -it roach1 ./cockroach sql < /cockroach/init/cockroach-init.sql || false
+cat $BASE/conf/crdb.sql | docker exec -i roach1 ./cockroach sql --certs-dir=/cockroach/certs || false
 
 # To test connection;
 #  docker exec -it roach1 ./cockroach sql --certs-dir=/cockroach/certs

@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS coviddb;
 
 USE coviddb;
 
-GRANT ALL ON DATABASE covid TO coviduser;
+GRANT ALL ON DATABASE coviddb TO coviduser;
 
 CREATE TABLE IF NOT EXISTS TEST (
   id UUID NOT NULL,
